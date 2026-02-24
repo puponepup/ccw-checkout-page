@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout — Certified Concealed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+
+    .container-checkout { max-width: 960px; }
+
+    /* ── Timer ── */
+    .timer-wrap { padding: 30px 0 24px; }
+    .timer-heading {
+      font-size: 28px; font-weight: 900; color: #0f1b3d;
+      margin: 0 0 18px; line-height: 1.2;
+    }
+    .timer-bar {
+      background: #fdf8e1;
+      border-top: 2.5px solid #010200;
+      border-bottom: 2.5px solid #010200;
+      border-left: none; border-right: none;
+      padding: 14px 0;
+      font-size: 26px; font-weight: 800; color: #0f1b3d;
+      margin: 0 0 14px; line-height: 1.3;
+    }
+    .timer-countdown {
+      font-size: 42px; font-weight: 900; color: #d42a2a;
+      letter-spacing: .02em; line-height: 1.1;
+    }
+
+    /* ── Secure Checkout header ── */
+    .secure-row i { font-size: 28px; color: #303030; }
+    .secure-row span { font-size: 19.4px; color: #212529; }
+
+    /* ── Card (form container) ── */
+    .checkout-card {
+      background: #f8f9fa; border: 1px solid #dddddd;
+      border-radius: 15px; box-shadow: 0 -7px 13px rgba(0,0,0,.1);
+      padding: 15px 15px 30px;
+    }
+
+    /* ── Section header inside form ── */
+    .form-section-header i { font-size: 14px; color: #303030; }
+    .form-section-header span { font-size: 15.4px; font-weight: 500; color: #111111; }
+    .form-section-header.upper span { text-transform: uppercase; }
+
+    /* ── Payment method tabs ── */
+    .pay-tab {
+      padding: 6px 14px; border-radius: 4px;
+      font-size: 15.4px; cursor: pointer; border: 1px solid #dee2e6;
+      background: #f8f9fa; color: #212529;
+    }
+    .pay-tab.active { background: #2986b8; border-color: #2986b8; color: #fff; }
+    .pay-tab i { font-size: 15px; }
+
+    /* ── Country select with flag ── */
+    .country-flag {
+      width: 44px; height: 38px; border: 1px solid #ced4da; border-radius: 4px;
+      overflow: hidden; background: #fff;
+    }
+    .country-flag img { width: 30px; }
+
+    /* ── Trust Guard badges ── */
+    .trust-badges img { height: 50px; width: auto; }
+
+    /* ── Card Details section ── */
+    .cc-brands img { height: 21px; width: 30px; }
+
+    /* ── Buy button ── */
+    .btn-buy {
+      border-radius: 50px;
+      background: linear-gradient(180deg, #4a90f4 0%, #3b7dde 100%);
+      border: none;
+      font-size: 18px; font-weight: 800;
+      letter-spacing: .04em; text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(59,125,222,.4);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-buy:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(59,125,222,.5);
+      background: linear-gradient(180deg, #4a90f4 0%, #3b7dde 100%);
+    }
+    .btn-buy:active { filter: brightness(.95); transform: translateY(1px); }
+    .btn-buy .hand-cursor {
+      width: 32px; height: 32px; flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      animation: hand-pulse 1s ease-in-out infinite;
+    }
+    .btn-buy .hand-cursor img { width: 100%; height: 100%; object-fit: contain; }
+    @keyframes hand-pulse {
+      0%, 100% { transform: scale(1) translateX(0); }
+      50% { transform: scale(1.18) translateX(-3px); }
+    }
+
+    /* ── Secure footer line ── */
+    .secure-footer i { font-size: 12px; color: #303030; }
+    .secure-footer span { font-size: 12.1px; color: #111111; }
+
+    /* ── Order Details ── */
+    .order-header i { font-size: 19px; color: #303030; }
+    .order-header span { font-size: 19.4px; color: #212529; }
+    .product-title { font-size: 19.4px; color: #212529; }
+    .product-permit-img img { max-width: 100%; height: auto; }
+
+    /* ── Price rows ── */
+    .price-row { font-size: 15.4px; }
+    .price-row.total { font-weight: 700; }
+    .price-row .strike { text-decoration: line-through; color: #dc3545; }
+    .price-row .label-punch { color: #dc3545; }
+
+    /* ── Order bumps ── */
+    .bumps { border-top: 1px solid #dee2e6; }
+    .bump-title { font-size: 15.4px; font-weight: 700; }
+
+    .bump {
+      border-width: 2px; border-style: dashed; border-radius: 6px;
+      background: #fff; overflow: hidden;
+    }
+    .bump--blue { border-color: #376daf; }
+    .bump--red { border-color: #a33a2f; }
+    .bump--punch { border-color: #d93025; border-radius: 8px; background: #f6f9fe; }
+
+    .bump-label { cursor: pointer; }
+    .bump-label--gray { background: #f7f7f7; }
+    .bump-label--carmine { background: #a33a2f; position: relative; }
+    .bump-label--carmine::after {
+      content: ''; position: absolute; inset: 6px;
+      border: 3px dashed #fff; border-radius: 4px; pointer-events: none;
+    }
+    .bump-label--egg { background: #fff3bf; border-radius: 10px; }
+
+    .bump-cb {
+      flex-shrink: 0; width: 20px; height: 20px;
+      border: 2px solid #767676; border-radius: 3px;
+      background: #fff; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      position: relative;
+    }
+    .bump-cb:checked { background: #376daf; border-color: #376daf; }
+    .bump-cb:checked::after {
+      content: '✓'; position: absolute;
+      top: -1px; left: 3px;
+      font-size: 14px; font-weight: 700; color: #fff;
+    }
+    .bump--red .bump-cb:checked { background: #a33a2f; border-color: #a33a2f; }
+    .bump--punch .bump-cb:checked { background: #d93025; border-color: #d93025; }
+
+    .bump-label-text {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 16px; font-weight: 600; line-height: 1.3; color: #1f2937;
+    }
+    .bump-label--carmine .bump-label-text { color: #fff; }
+
+    .bump-desc {
+      font-family: Inter, system-ui, sans-serif; font-size: 14px;
+      line-height: 1.6; color: #374151;
+    }
+
+    .bump-urgency {
+      font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600;
+      color: #d93025; line-height: 1.4;
+    }
+
+    .flash-arrow {
+      display: inline-block; font-size: 20px; line-height: 1;
+      color: #d93025; font-weight: 900;
+      animation: flash-arrow 0.8s ease-in-out infinite;
+    }
+    @keyframes flash-arrow {
+      0%, 100% { opacity: 1; transform: translateX(0); }
+      50% { opacity: 0.3; transform: translateX(-4px); }
+    }
+
+    /* ── Product box image ── */
+    .product-box img { max-width: 520px; width: 100%; height: auto; }
+
+    /* ── Reviews header ── */
+    .reviews-header { background: #042244; }
+    .reviews-header img { width: 165px; height: auto; }
+    .reviews-header h2 {
+      font-family: Roboto, -apple-system, system-ui, sans-serif;
+      font-size: 29px; font-weight: 700; color: #fff;
+      line-height: 1;
+    }
+    .reviews-header p {
+      font-family: Roboto, -apple-system, system-ui, sans-serif;
+      font-size: 23px; font-weight: 400; color: #fff;
+      line-height: 1;
+    }
+
+    /* ── Verified badge bar ── */
+    .verified-bar img { width: 321px; max-width: 100%; height: auto; }
+
+    /* ── Testimonials ── */
+    .testimonial-img {
+      width: 100%; height: auto; display: block;
+      border: 1px solid #9b9b9b;
+      box-shadow: 1px 0 1px 1px rgba(220,220,220,1);
+    }
+    .testimonial-img.no-border { border: none; box-shadow: none; }
+
+    /* ── Scroll-back CTA button ── */
+    .cta-scroll a {
+      display: block; text-align: center; text-decoration: none;
+      background: linear-gradient(180deg, #5cb85c 0%, #449d44 100%);
+      color: #fff;
+      padding: 20px 40px 22px; border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(68,157,68,.45), 0 2px 4px rgba(0,0,0,.15);
+      transition: transform .15s, box-shadow .15s;
+      animation: cta-pulse 2s ease-in-out infinite;
+      border: 2px solid #3d8b3d;
+      cursor: pointer;
+    }
+    .cta-scroll a:hover {
+      transform: translateY(-2px); color: #fff;
+      box-shadow: 0 6px 18px rgba(68,157,68,.55), 0 3px 6px rgba(0,0,0,.18);
+    }
+    .cta-scroll a:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(68,157,68,.35); }
+    @keyframes cta-pulse {
+      0%, 100% { box-shadow: 0 4px 12px rgba(68,157,68,.45), 0 2px 4px rgba(0,0,0,.15); }
+      50% { box-shadow: 0 4px 24px rgba(68,157,68,.7), 0 2px 8px rgba(0,0,0,.2); }
+    }
+    .cta-scroll .cta-main {
+      font-family: Roboto, system-ui, sans-serif;
+      font-size: 28px; font-weight: 900; line-height: 1.3;
+      letter-spacing: .014em; display: block;
+      text-transform: uppercase;
+      text-shadow: 0 1px 2px rgba(0,0,0,.2);
+    }
+    .cta-scroll .cta-sub {
+      font-family: Roboto, system-ui, sans-serif;
+      font-size: 15px; font-weight: 400; line-height: 1.3;
+      letter-spacing: .024em; display: block; margin-top: 6px;
+      opacity: .9;
+    }
+
+    /* ── Guarantee ── */
+    .guarantee-inner { max-width: 468px; }
+    .guarantee-inner img { width: 104px; height: 100px; }
+    .guarantee-inner p { font-size: 12.8px; line-height: 1.52; }
+
+    /* ── Footer ── */
+    .footer-section { box-shadow: 2px 2px 8px rgba(0,0,0,.18); }
+    .footer-terms h3 { font-size: 15.4px; font-weight: 600; }
+    .footer-terms ul { list-style: none; padding-left: 32px; }
+    .footer-terms li {
+      font-size: 12.1px; line-height: 1.75; position: relative;
+    }
+    .footer-terms li::before {
+      content: "\f111"; font-family: "Font Awesome 5 Free"; font-weight: 900;
+      font-size: 5px; position: absolute; left: -16px; top: 6px;
+    }
+    .footer-terms a { color: #2986b8; }
+    .footer-copy { font-size: 12.1px; line-height: 1.52; }
+
+    /* ── Mobile overrides ── */
+    @media (max-width: 991.98px) {
+      .timer-heading { font-size: 22px; }
+      .timer-bar { font-size: 20px; padding: 10px 12px; }
+      .timer-countdown { font-size: 34px; }
+      .bump-label-text { font-size: 14px; }
+      .bump-desc { font-size: 13px; }
+      .checkout-card { padding: 12px 12px 24px; }
+      .reviews-header h2 { font-size: 22px; }
+      .reviews-header p { font-size: 18px; }
+      .verified-bar img { width: 260px; }
+      .cta-scroll a { width: 100%; padding: 18px 20px 20px; }
+      .cta-scroll .cta-main { font-size: 22px; }
+      .cta-scroll .cta-sub { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ BANNER ═══ -->
+<div class="container-checkout mx-auto">
+  <img src="./assets/banner_Np2-1ebdb2.png" alt="Banner" class="img-fluid d-block" />
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="navbar navbar-light bg-white shadow-sm justify-content-center">
+  <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap" style="max-width:480px; padding: 4px 12px; gap: 12px;">
+    <img src="./assets/buygoods-logo-black.svg" alt="BuyGoods" style="height:23px; width:100px;" />
+    <div class="d-flex align-items-center gap-1" style="font-size:13.7px;">
+      <span>Having trouble?&nbsp;</span>
+      <a href="#" class="text-decoration-none" style="color:#2986b8;">Contact us</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<main class="container-checkout mx-auto px-3">
+
+  <!-- Timer -->
+  <div class="timer-wrap text-center">
+    <div class="timer-heading">Secure Payment</div>
+    <div class="timer-bar">Acceptance of application ends in:</div>
+    <div class="timer-countdown">00:14:51</div>
+  </div>
+
+  <!-- Two-column layout -->
+  <div class="row gx-3">
+
+    <!-- RIGHT COLUMN (order details + bumps — appears first on mobile) -->
+    <div class="col-lg-5 order-lg-last mb-4 mb-lg-0">
+      <div class="order-panel">
+
+        <!-- Order Details header -->
+        <div class="order-header d-flex align-items-center justify-content-center gap-2 py-4 border-bottom">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Order Details</span>
+        </div>
+
+        <!-- Product title -->
+        <div class="product-title text-center py-3">CCW Application</div>
+        <div class="product-permit-img text-center pb-3"><img src="./assets/permit-rush.png" alt="Concealed Carry Permit" /></div>
+
+        <!-- Price breakdown -->
+        <div class="price-rows">
+          <div class="price-row d-flex justify-content-between align-items-center py-3 border-top">
+            <span class="label-punch">Normal Price</span>
+            <span class="strike">$218.00</span>
+          </div>
+          <div class="price-row d-flex justify-content-between align-items-center py-3 border-top">
+            <span>Your Price Today</span>
+            <span>$109.00</span>
+          </div>
+          <div class="price-row total d-flex justify-content-between align-items-center py-3 border-top">
+            <span>Total USD</span>
+            <span style="color:#28a745;">$109.00</span>
+          </div>
+        </div>
+
+        <!-- Order Bumps -->
+        <div class="bumps d-flex flex-column gap-3 pt-3">
+          <div class="bump-title"><strong>Most chosen by applicants</strong></div>
+
+          <!-- Bump 1 -->
+          <div class="bump bump--punch">
+            <label class="bump-label bump-label--egg d-flex align-items-center gap-2 p-2">
+              <span class="flash-arrow">➤</span>
+              <input type="checkbox" class="bump-cb" />
+              <span class="bump-label-text">YES — Add The Complete Gun Safety Video Course For Just $45 (Save $97)</span>
+            </label>
+            <div class="bump-urgency px-3 pt-1">⚠️ This offer disappears the moment you complete your order.</div>
+            <div class="bump-desc px-3 py-2">Getting your permit is <strong>step one</strong>. Knowing what to do with it — <strong>under pressure, in real situations</strong> — is what keeps your family safe.<br/><br/>Covers what the permit test <strong>never teaches</strong>: safe handling, <strong>defensive scenarios</strong>, legal aftermath, and daily carry habits.<br/><br/><strong>One click. Added instantly. No forms.</strong></div>
+          </div>
+
+          <!-- Bump 2 -->
+          <div class="bump bump--blue">
+            <label class="bump-label bump-label--gray d-flex align-items-center gap-2 p-2">
+              <span class="flash-arrow">➤</span>
+              <input type="checkbox" class="bump-cb" />
+              <span class="bump-label-text">Claim Instant Portal Access + VIP Training Portal — Just $9 To Start</span>
+            </label>
+            <div class="bump-desc px-3 py-2">Instant entry into a <strong>private training community</strong> for permit holders. <strong>Expert tactical guides</strong>, monthly legal updates, and fresh content every month.<br/><br/>Just <strong>$9 your first month</strong>, then $14/month — <strong>cancel anytime</strong> with one email.</div>
+          </div>
+
+          <!-- Bump 3 -->
+          <div class="bump bump--red">
+            <label class="bump-label bump-label--carmine d-flex align-items-center gap-2 p-2">
+              <span class="flash-arrow">➤</span>
+              <input type="checkbox" class="bump-cb" />
+              <span class="bump-label-text">Add A 2nd Permit For A Loved One — 50% OFF ($59 Instead of $119) — Today Only</span>
+            </label>
+            <div class="bump-desc px-3 py-2">You're protecting yourself. <strong>What about the people next to you?</strong><br/><br/>Add a second permit for your <strong>spouse, partner, or family member</strong> — same process, <strong>half the price</strong>. Only available on this page.<br/><br/><strong>It's the #1 thing our customers wish they'd added.</strong></div>
+          </div>
+
+          <!-- Bump 4 -->
+          <div class="bump bump--blue">
+            <label class="bump-label bump-label--gray d-flex align-items-center gap-2 p-2">
+              <span class="flash-arrow">➤</span>
+              <input type="checkbox" class="bump-cb" />
+              <span class="bump-label-text">YES — Carry Legally In Up To 30 Additional States For Just $14.99</span>
+            </label>
+            <div class="bump-desc px-3 py-2">Your permit covers you at home. <strong>Cross state lines and everything changes.</strong><br/><br/>We'll process your <strong>multi-state coverage</strong> alongside your application — <strong>zero extra hassle</strong>, protection everywhere you travel.<br/><br/><strong>One-time fee. No subscription. No brainer.</strong></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div><!-- /col-right -->
+
+    <!-- LEFT COLUMN (payment form — appears second on mobile, first on desktop) -->
+    <div class="col-lg-7 order-lg-first">
+
+      <!-- Secure Checkout -->
+      <div class="secure-row d-flex align-items-center justify-content-center gap-2 pt-4">
+        <i class="fas fa-lock"></i>
+        <span>Secure Checkout</span>
+      </div>
+
+      <div class="checkout-card mt-3" id="payment-form">
+
+        <!-- Payment Method -->
+        <div class="form-section-header d-flex align-items-center gap-1 mb-2">
+          <span class="text-uppercase">Payment Method</span>
+        </div>
+        <div class="d-flex gap-2 mb-3">
+          <div class="pay-tab active d-flex align-items-center gap-1"><i class="far fa-credit-card"></i> Credit Card</div>
+          <div class="pay-tab d-flex align-items-center gap-1"><i class="fab fa-paypal"></i> PayPal</div>
+          <div class="pay-tab d-flex align-items-center gap-1"><i class="fab fa-apple-pay"></i> Apple Pay</div>
+        </div>
+
+        <!-- Customer Information -->
+        <div class="form-section-header d-flex align-items-center gap-1 mb-2">
+          <i class="fas fa-user"></i>
+          <span>Customer Information</span>
+        </div>
+        <div class="mb-3">
+          <input type="email" class="form-control mb-2" placeholder="Email address" />
+          <input type="tel" class="form-control" placeholder="Phone" />
+        </div>
+
+        <!-- Billing Information -->
+        <div class="form-section-header d-flex align-items-center gap-1 mb-2">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Billing Information</span>
+        </div>
+        <div class="mb-3">
+          <input type="text" class="form-control mb-2" placeholder="Your Full Name" />
+          <input type="text" class="form-control mb-2" placeholder="Your billing address" />
+          <div class="d-flex gap-2 mb-2">
+            <div class="country-flag d-flex align-items-center justify-content-center flex-shrink-0">
+              <img src="./assets/country-flag.svg" alt="Flag" />
+            </div>
+            <select class="form-select">
+              <option>Agrigento</option>
+            </select>
+          </div>
+          <div class="row g-2">
+            <div class="col-6"><input type="text" class="form-control" placeholder="Zip Code" /></div>
+            <div class="col-6"><input type="text" class="form-control" placeholder="City" /></div>
+          </div>
+        </div>
+
+        <!-- Trust Guard badges -->
+        <div class="trust-badges d-flex justify-content-center gap-3 py-2">
+          <img src="./assets/trust-guard-1.png" alt="Trust Guard" />
+          <img src="./assets/trust-guard-2.png" alt="Trust Guard" />
+        </div>
+
+        <!-- Card Details -->
+        <div class="py-2">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="d-flex align-items-center gap-1">
+              <i class="far fa-credit-card" style="font-size:14px; color:#303030;"></i>
+              <span style="font-size:15.4px; font-weight:500;">Card Details</span>
+            </div>
+            <div class="cc-brands d-flex gap-1 align-items-center">
+              <img src="./assets/visa.svg" alt="Visa" />
+              <img src="./assets/mastercard.svg" alt="Mastercard" />
+              <img src="./assets/amex.svg" alt="Amex" />
+              <img src="./assets/discover.svg" alt="Discover" />
+              <img src="./assets/jcb.svg" alt="JCB" />
+            </div>
+          </div>
+          <input type="text" class="form-control mb-2" placeholder="Credit Card Number" />
+          <div class="row g-2">
+            <div class="col-6"><input type="text" class="form-control" placeholder="Expiry Date (MM/YYYY)" /></div>
+            <div class="col-6 position-relative">
+              <input type="text" class="form-control" placeholder="Security Code" style="padding-right:32px;" />
+              <i class="fas fa-lock position-absolute" style="right:20px;top:50%;transform:translateY(-50%);font-size:14px;color:#303030;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buy Now button -->
+        <button class="btn btn-primary btn-lg w-100 btn-buy d-flex align-items-center justify-content-center gap-2 mt-3 py-3" type="button">
+          Fast-Track My Permit
+          <span class="hand-cursor"><img src="./assets/hand-cursor.png" alt="" /></span>
+        </button>
+
+        <!-- Secure 256 Bit footer -->
+        <div class="secure-footer d-flex align-items-center justify-content-center gap-1 pt-2">
+          <i class="fas fa-lock"></i>
+          <span>Secure 256 Bit Encrypted Connection</span>
+        </div>
+
+      </div><!-- /.checkout-card -->
+
+      <!-- Product box image -->
+      <div class="product-box text-center pt-2 mt-3">
+        <img src="./assets/prbox_tbx-619251.png" alt="Product Box" />
+      </div>
+
+      <!-- Guarantee -->
+      <div class="d-flex justify-content-center py-4">
+        <div class="guarantee-inner text-center">
+          <img src="./assets/badge-60-day-56586a.png" alt="60-day money back guarantee" />
+          <p class="mt-2">We put our hearts and souls into building BuyGoods as the most safe, friendly and reliable online shopping destination. You are protected by our 60 days no questions asked money back guarantee.</p>
+        </div>
+      </div>
+
+    </div><!-- /col-left -->
+
+  </div><!-- /row -->
+</main>
+
+<!-- ═══ REVIEWS HEADER ═══ -->
+<section class="reviews-header text-center py-4 mt-3">
+  <img src="./assets/reviews-stars-56586a.png" alt="5 stars" class="mb-2" />
+  <h2 class="mb-2">OVER 25,000 REVIEWS</h2>
+  <p class="mb-0">Here are a few verified reviews:</p>
+</section>
+
+<!-- ═══ VERIFIED BADGE ═══ -->
+<div class="verified-bar text-center pt-2">
+  <img src="./assets/verified-badge-59978c.png" alt="Verified reviews" />
+</div>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<div class="container-checkout mx-auto py-4">
+  <div class="row g-0">
+    <div class="col-lg-4 col-12 d-flex flex-column">
+      <img src="./assets/testimonial-01-5f8db4.png" alt="Testimonial 1" class="testimonial-img" />
+      <img src="./assets/testimonial-02-768d1e.png" alt="Testimonial 2" class="testimonial-img no-border" />
+      <img src="./assets/testimonial-03-74ebc8.png" alt="Testimonial 3" class="testimonial-img" />
+    </div>
+    <div class="col-lg-4 col-12 d-flex flex-column">
+      <img src="./assets/testimonial-04-470398.png" alt="Testimonial 4" class="testimonial-img no-border" />
+      <img src="./assets/testimonial-05-cba634.png" alt="Testimonial 5" class="testimonial-img" />
+      <img src="./assets/testimonial-06-6494a0.png" alt="Testimonial 6" class="testimonial-img" />
+    </div>
+    <div class="col-lg-4 col-12 d-flex flex-column">
+      <img src="./assets/testimonial-07-f3795d.png" alt="Testimonial 7" class="testimonial-img" />
+      <img src="./assets/testimonial-08-b6e0b6.png" alt="Testimonial 8" class="testimonial-img" />
+      <img src="./assets/testimonial-09-f44ed9.png" alt="Testimonial 9" class="testimonial-img no-border" />
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCROLL-BACK CTA ═══ -->
+<div class="cta-scroll container-checkout mx-auto d-flex justify-content-center py-4">
+  <a href="#payment-form">
+    <span class="cta-main">Fast-Track My Permit</span>
+    <span class="cta-sub">Click here to complete your application</span>
+  </a>
+</div>
+
+<!-- ═══ SPACER ═══ -->
+<div style="height:48px;"></div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer-section bg-white py-4">
+  <div class="container-checkout mx-auto px-3">
+    <div class="footer-terms mb-3">
+      <h3>Terms of purchase:</h3>
+      <ul class="mb-0">
+        <li>By placing an order, you acknowledge that you have read and accept our <a href="#">terms and conditions</a> and <a href="#">refund policy</a></li>
+        <li>By entering your contact details on this form, you are giving us consent to contact you about this order</li>
+        <li>You are buying from BuyGoods (Customer Support: 302-404-2568).</li>
+        <li>Your purchase will appear on your bank statement under the name "BuyGoods".</li>
+        <li>The geographic location of your computer has been determined and recorded. All attempts at fraud will be prosecuted.</li>
+        <li>Information submitted by this payment process is handled within the constraints of our <a href="#">privacy policy</a>.</li>
+        <li>BuyGoods is not a payment processor or bank. We strictly operate as an online retailer.</li>
+        <li>Please note that BuyGoods is not responsible for any potential financial losses, including exchange rates or foreign transaction fees.</li>
+      </ul>
+    </div>
+    <div class="footer-copy text-center">
+      Copyright 2024 &copy;BuyGoods Inc, 1000 North West st. Suite #1200, Wilmington, DE, 19801, USA
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="./assets/smart-notifications.js"
+  data-sn-product="CCW Application"
+  data-sn-interval="12,30"
+  data-sn-max="20"
+  data-sn-duration="6">
+</script>
+
+<script>
+(function () {
+  var el = document.querySelector('.timer-countdown');
+  if (!el) return;
+  var parts = el.textContent.trim().split(':').map(Number);
+  var total = (parts[0] || 0) * 3600 + (parts[1] || 0) * 60 + (parts[2] || 0);
+
+  function pad(n) { return n < 10 ? '0' + n : n; }
+
+  function tick() {
+    if (total <= 0) { el.textContent = '00:00:00'; return; }
+    total--;
+    var h = Math.floor(total / 3600);
+    var m = Math.floor((total % 3600) / 60);
+    var s = total % 60;
+    el.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+  }
+
+  setInterval(tick, 1000);
+})();
+</script>
+
+</body>
+</html>
