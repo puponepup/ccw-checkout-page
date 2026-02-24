@@ -204,23 +204,23 @@
     /* ── Scroll-back CTA button ── */
     .cta-scroll a {
       display: block; text-align: center; text-decoration: none;
-      background: linear-gradient(180deg, #5cb85c 0%, #449d44 100%);
+      background: linear-gradient(180deg, #4a90f4 0%, #3b7dde 100%);
       color: #fff;
       padding: 20px 40px 22px; border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(68,157,68,.45), 0 2px 4px rgba(0,0,0,.15);
+      box-shadow: 0 4px 12px rgba(59,125,222,.4), 0 2px 4px rgba(0,0,0,.15);
       transition: transform .15s, box-shadow .15s;
       animation: cta-pulse 2s ease-in-out infinite;
-      border: 2px solid #3d8b3d;
+      border: 2px solid #3570c7;
       cursor: pointer;
     }
     .cta-scroll a:hover {
       transform: translateY(-2px); color: #fff;
-      box-shadow: 0 6px 18px rgba(68,157,68,.55), 0 3px 6px rgba(0,0,0,.18);
+      box-shadow: 0 6px 18px rgba(59,125,222,.55), 0 3px 6px rgba(0,0,0,.18);
     }
-    .cta-scroll a:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(68,157,68,.35); }
+    .cta-scroll a:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(59,125,222,.35); }
     @keyframes cta-pulse {
-      0%, 100% { box-shadow: 0 4px 12px rgba(68,157,68,.45), 0 2px 4px rgba(0,0,0,.15); }
-      50% { box-shadow: 0 4px 24px rgba(68,157,68,.7), 0 2px 8px rgba(0,0,0,.2); }
+      0%, 100% { box-shadow: 0 4px 12px rgba(59,125,222,.4), 0 2px 4px rgba(0,0,0,.15); }
+      50% { box-shadow: 0 4px 24px rgba(59,125,222,.7), 0 2px 8px rgba(0,0,0,.2); }
     }
     .cta-scroll .cta-main {
       font-family: Roboto, system-ui, sans-serif;
@@ -268,7 +268,8 @@
       .reviews-header p { font-size: 18px; }
       .verified-bar img { width: 260px; }
       .testimonials-container { padding-left: 3px; padding-right: 3px; }
-      .cta-scroll a { width: 100%; padding: 18px 20px 20px; }
+      .cta-scroll { padding-left: 16px; padding-right: 16px; }
+      .cta-scroll a { padding: 18px 20px 20px; }
       .cta-scroll .cta-main { font-size: 22px; }
       .cta-scroll .cta-sub { font-size: 13px; }
     }
